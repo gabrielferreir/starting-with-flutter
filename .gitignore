@@ -71,3 +71,75 @@ primeiro_projeto/!**/ios/**/default.mode2v3
 primeiro_projeto/!**/ios/**/default.pbxuser
 primeiro_projeto/!**/ios/**/default.perspectivev3
 primeiro_projeto/!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+# Miscellaneous
+imc/*.class
+imc/*.lock
+imc/*.log
+imc/*.pyc
+imc/*.swp
+imc/.DS_Store
+imc/.atom/
+imc/.buildlog/
+imc/.history
+imc/.svn/
+
+# IntelliJ related
+imc/*.iml
+imc/*.ipr
+imc/*.iws
+imc/.idea/
+
+# Visual Studio Code related
+imc/.vscode/
+
+# Flutter/Dart/Pub related
+imc/**/doc/api/
+imc/.dart_tool/
+imc/.flutter-plugins
+imc/.packages
+imc/.pub-cache/
+imc/.pub/
+imc/build/
+
+# Android related
+imc/**/android/**/gradle-wrapper.jar
+imc/**/android/.gradle
+imc/**/android/captures/
+imc/**/android/gradlew
+imc/**/android/gradlew.bat
+imc/**/android/local.properties
+imc/**/android/**/GeneratedPluginRegistrant.java
+
+# iOS/XCode related
+imc/**/ios/**/*.mode1v3
+imc/**/ios/**/*.mode2v3
+imc/**/ios/**/*.moved-aside
+imc/**/ios/**/*.pbxuser
+imc/**/ios/**/*.perspectivev3
+imc/**/ios/**/*sync/
+imc/**/ios/**/.sconsign.dblite
+imc/**/ios/**/.tags*
+imc/**/ios/**/.vagrant/
+imc/**/ios/**/DerivedData/
+imc/**/ios/**/Icon?
+imc/**/ios/**/Pods/
+imc/**/ios/**/.symlinks/
+imc/**/ios/**/profile
+imc/**/ios/**/xcuserdata
+imc/**/ios/.generated/
+imc/**/ios/Flutter/App.framework
+imc/**/ios/Flutter/Flutter.framework
+imc/**/ios/Flutter/Generated.xcconfig
+imc/**/ios/Flutter/app.flx
+imc/**/ios/Flutter/app.zip
+imc/**/ios/Flutter/flutter_assets/
+imc/**/ios/ServiceDefinitions.json
+imc/**/ios/Runner/GeneratedPluginRegistrant.*
+
+# Exceptions to above rules.
+imc/!**/ios/**/default.mode1v3
+imc/!**/ios/**/default.mode2v3
+imc/!**/ios/**/default.pbxuser
+imc/!**/ios/**/default.perspectivev3
+imc/!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
