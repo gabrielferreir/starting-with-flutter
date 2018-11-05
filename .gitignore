@@ -1,0 +1,73 @@
+.idea
+
+# Miscellaneous
+primeiro_projeto/*.class
+primeiro_projeto/*.lock
+primeiro_projeto/*.log
+primeiro_projeto/*.pyc
+primeiro_projeto/*.swp
+primeiro_projeto/.DS_Store
+primeiro_projeto/.atom/
+primeiro_projeto/.buildlog/
+primeiro_projeto/.history
+primeiro_projeto/.svn/
+
+# IntelliJ related
+primeiro_projeto/*.iml
+primeiro_projeto/*.ipr
+primeiro_projeto/*.iws
+primeiro_projeto/.idea/
+
+# Visual Studio Code related
+primeiro_projeto/.vscode/
+
+# Flutter/Dart/Pub related
+primeiro_projeto/**/doc/api/
+primeiro_projeto/.dart_tool/
+primeiro_projeto/.flutter-plugins
+primeiro_projeto/.packages
+primeiro_projeto/.pub-cache/
+primeiro_projeto/.pub/
+primeiro_projeto/build/
+
+# Android related
+primeiro_projeto/**/android/**/gradle-wrapper.jar
+primeiro_projeto/**/android/.gradle
+primeiro_projeto/**/android/captures/
+primeiro_projeto/**/android/gradlew
+primeiro_projeto/**/android/gradlew.bat
+primeiro_projeto/**/android/local.properties
+primeiro_projeto/**/android/**/GeneratedPluginRegistrant.java
+
+# iOS/XCode related
+primeiro_projeto/**/ios/**/*.mode1v3
+primeiro_projeto/**/ios/**/*.mode2v3
+primeiro_projeto/**/ios/**/*.moved-aside
+primeiro_projeto/**/ios/**/*.pbxuser
+primeiro_projeto/**/ios/**/*.perspectivev3
+primeiro_projeto/**/ios/**/*sync/
+primeiro_projeto/**/ios/**/.sconsign.dblite
+primeiro_projeto/**/ios/**/.tags*
+primeiro_projeto/**/ios/**/.vagrant/
+primeiro_projeto/**/ios/**/DerivedData/
+primeiro_projeto/**/ios/**/Icon?
+primeiro_projeto/**/ios/**/Pods/
+primeiro_projeto/**/ios/**/.symlinks/
+primeiro_projeto/**/ios/**/profile
+primeiro_projeto/**/ios/**/xcuserdata
+primeiro_projeto/**/ios/.generated/
+primeiro_projeto/**/ios/Flutter/App.framework
+primeiro_projeto/**/ios/Flutter/Flutter.framework
+primeiro_projeto/**/ios/Flutter/Generated.xcconfig
+primeiro_projeto/**/ios/Flutter/app.flx
+primeiro_projeto/**/ios/Flutter/app.zip
+primeiro_projeto/**/ios/Flutter/flutter_assets/
+primeiro_projeto/**/ios/ServiceDefinitions.json
+primeiro_projeto/**/ios/Runner/GeneratedPluginRegistrant.*
+
+# Exceptions to above rules.
+primeiro_projeto/!**/ios/**/default.mode1v3
+primeiro_projeto/!**/ios/**/default.mode2v3
+primeiro_projeto/!**/ios/**/default.pbxuser
+primeiro_projeto/!**/ios/**/default.perspectivev3
+primeiro_projeto/!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
