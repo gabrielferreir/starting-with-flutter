@@ -15,6 +15,8 @@ class _HomeState extends State<Home> {
   TextEditingController weightController = TextEditingController();
   TextEditingController widthController = TextEditingController();
 
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   void _resetFields() {
     weightController.text = '';
     widthController.text = '';
@@ -26,7 +28,6 @@ class _HomeState extends State<Home> {
 
   void _calculate() {
     setState(() {
-
       double weight = double.parse(weightController.text);
       double height = double.parse(widthController.text) / 100;
       double imc = weight / (height * height);
@@ -53,63 +54,77 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Calculadora de IMC'),
-        backgroundColor: Colors.green,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () {
-              this._resetFields();
-            },
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Padding(
-                padding: EdgeInsets.all(32.0),
-                child:
-                Icon(Icons.person_outline, size: 120.0, color: Colors.green)),
-            TextField(
-              keyboardType: TextInputType.number,
-              controller: weightController,
-              decoration: InputDecoration(
-                  labelText: "Peso (Kg)",
-                  labelStyle: TextStyle(color: Colors.green)),
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              controller: widthController,
-              decoration: InputDecoration(
-                  labelText: "Altura (cm)",
-                  labelStyle: TextStyle(color: Colors.green)),
-            ),
-            Container(
-              height: 48.0,
-              margin: EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 16.0),
-              child: RaisedButton(
-                onPressed: () {
-                  this._calculate();
-                },
-                child: Text(
-                  "Calcular",
-                  style: TextStyle(color: Colors.white, fontSize: 25.0),
-                ),
-                color: Colors.green,
-              ),
-            ),
-            Text(
-              text,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.green, fontSize: 16.0),
+        appBar: AppBar(
+          title: Text('Calculadora de IMC'),
+          backgroundColor: Colors.green,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                this._resetFields();
+              },
             )
           ],
         ),
-      )
-    );
+        body: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                    padding: EdgeInsets.all(32.0),
+                    child: Icon(Icons.person_outline,
+                        size: 120.0, color: Colors.green)),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: weightController,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Insira seu peso!';
+                    }
+                  },
+                  decoration: InputDecoration(
+                      labelText: "Peso (Kg)",
+                      labelStyle: TextStyle(color: Colors.green)),
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: widthController,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Insira sua altura!';
+                    }
+                  },
+                  decoration: InputDecoration(
+                      labelText: "Altura (cm)",
+                      labelStyle: TextStyle(color: Colors.green)),
+                ),
+                Container(
+                  height: 48.0,
+                  margin: EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 16.0),
+                  child: RaisedButton(
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        this._calculate();
+                      }
+                    },
+                    child: Text(
+                      "Calcular",
+                      style: TextStyle(color: Colors.white, fontSize: 25.0),
+                    ),
+                    color: Colors.green,
+                  ),
+                ),
+                Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.green, fontSize: 16.0),
+                )
+              ],
+            ),
+          ),
+        ));
   }
 }
