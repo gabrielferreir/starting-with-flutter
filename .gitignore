@@ -72,6 +72,8 @@ primeiro_projeto/!**/ios/**/default.pbxuser
 primeiro_projeto/!**/ios/**/default.perspectivev3
 primeiro_projeto/!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
+#-----------------------------------------------------------------------------------------------------------------------
+
 # Miscellaneous
 imc/*.class
 imc/*.lock
@@ -143,3 +145,77 @@ imc/!**/ios/**/default.mode2v3
 imc/!**/ios/**/default.pbxuser
 imc/!**/ios/**/default.perspectivev3
 imc/!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+# Miscellaneous
+conversor/*.class
+conversor/*.lock
+conversor/*.log
+conversor/*.pyc
+conversor/*.swp
+conversor/.DS_Store
+conversor/.atom/
+conversor/.buildlog/
+conversor/.history
+conversor/.svn/
+
+# IntelliJ related
+conversor/*.iml
+conversor/*.ipr
+conversor/*.iws
+conversor/.idea/
+
+# Visual Studio Code related
+conversor/.vscode/
+
+# Flutter/Dart/Pub related
+conversor/**/doc/api/
+conversor/.dart_tool/
+conversor/.flutter-plugins
+conversor/.packages
+conversor/.pub-cache/
+conversor/.pub/
+conversor/build/
+
+# Android related
+conversor/**/android/**/gradle-wrapper.jar
+conversor/**/android/.gradle
+conversor/**/android/captures/
+conversor/**/android/gradlew
+conversor/**/android/gradlew.bat
+conversor/**/android/local.properties
+conversor/**/android/**/GeneratedPluginRegistrant.java
+
+# iOS/XCode related
+conversor/**/ios/**/*.mode1v3
+conversor/**/ios/**/*.mode2v3
+conversor/**/ios/**/*.moved-aside
+conversor/**/ios/**/*.pbxuser
+conversor/**/ios/**/*.perspectivev3
+conversor/**/ios/**/*sync/
+conversor/**/ios/**/.sconsign.dblite
+conversor/**/ios/**/.tags*
+conversor/**/ios/**/.vagrant/
+conversor/**/ios/**/DerivedData/
+conversor/**/ios/**/Icon?
+conversor/**/ios/**/Pods/
+conversor/**/ios/**/.symlinks/
+conversor/**/ios/**/profile
+conversor/**/ios/**/xcuserdata
+conversor/**/ios/.generated/
+conversor/**/ios/Flutter/App.framework
+conversor/**/ios/Flutter/Flutter.framework
+conversor/**/ios/Flutter/Generated.xcconfig
+conversor/**/ios/Flutter/app.flx
+conversor/**/ios/Flutter/app.zip
+conversor/**/ios/Flutter/flutter_assets/
+conversor/**/ios/ServiceDefinitions.json
+conversor/**/ios/Runner/GeneratedPluginRegistrant.*
+
+# Exceptions to above rules.
+conversor/!**/ios/**/default.mode1v3
+conversor/!**/ios/**/default.mode2v3
+conversor/!**/ios/**/default.pbxuser
+conversor/!**/ios/**/default.perspectivev3
+conversor/!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
