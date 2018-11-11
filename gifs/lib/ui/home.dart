@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gifs/ui/gif.dart';
 import 'package:http/http.dart' as http;
+import 'package:share/share.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -111,6 +112,9 @@ class _HomeState extends State<Home> {
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => Gif(snapshot.data['data'][index])));
+              },
+              onLongPress: () {
+                Share.share(snapshot.data['data'][index]['images']['fixed_height']['url']);
               },
               child: Image.network(
                 snapshot.data['data'][index]['images']['fixed_height']['url'],
