@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:agenda/contact.dart';
 import 'package:agenda/helpers/contact_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -23,12 +23,7 @@ class _HomeState extends State<Home> {
 //
 //    helper.saveContact(c);
 
-    helper.getAllContacts().then((onValue) {
-//      print(onValue);
-      setState(() {
-        contacts = onValue;
-      });
-    });
+    _getAllContacts();
   }
 
   @override
@@ -40,7 +35,9 @@ class _HomeState extends State<Home> {
         ),
         backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            _showContactPage();
+          },
           child: Icon(Icons.add),
           backgroundColor: Colors.blueAccent,
         ),
@@ -66,9 +63,15 @@ class _HomeState extends State<Home> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(this.contacts[index].name, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),),
-                    Text(this.contacts[index].email, style: TextStyle(fontSize: 14.0)),
-                    Text(this.contacts[index].phone, style: TextStyle(fontSize: 14.0)),
+                    Text(
+                      this.contacts[index].name,
+                      style: TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
+                    ),
+                    Text(this.contacts[index].email,
+                        style: TextStyle(fontSize: 14.0)),
+                    Text(this.contacts[index].phone,
+                        style: TextStyle(fontSize: 14.0)),
                   ],
                 ),
               )
@@ -76,6 +79,9 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
+      onTap: () {
+        _showContactPage(contact: contacts[index]);
+      },
     );
   }
 
@@ -89,7 +95,7 @@ class _HomeState extends State<Home> {
         shape: BoxShape.circle,
         color: Colors.blueAccent,
       ),
-      child: this.contacts[index].img == 'paz'
+      child: this.contacts[index].img == null
           ? Icon(
               Icons.person,
               color: Colors.white,
@@ -98,5 +104,26 @@ class _HomeState extends State<Home> {
               image: FileImage(File(this.contacts[index].img)),
             ),
     );
+  }
+
+  void _showContactPage({Contact contact}) async {
+    final recContact = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ContactPage(contact: contact)));
+    if (recContact != null) {
+      if (contact != null) {
+        await helper.updateContact(recContact);
+      } else {
+        await helper.saveContact(recContact);
+      }
+      _getAllContacts();
+    }
+  }
+
+  void _getAllContacts() {
+    helper.getAllContacts().then((onValue) {
+      setState(() {
+        contacts = onValue;
+      });
+    });
   }
 }

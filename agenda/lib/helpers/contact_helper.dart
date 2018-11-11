@@ -39,6 +39,7 @@ class ContactHelper {
   }
 
   Future<Contact> saveContact(Contact contact) async {
+    print(contact);
     Database dbContact = await db;
     contact.id = await dbContact.insert(contactTable, contact.toMap());
     return contact;
