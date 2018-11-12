@@ -39,63 +39,97 @@ class _ContactPageState extends State<ContactPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-        title: Text(_editedContact.name ?? 'Novo contato'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (_editedContact.name != null && _editedContact.name.isNotEmpty) {
-            Navigator.pop(context, _editedContact);
-          } else {
-            FocusScope.of(context).requestFocus(_nameFocus);
-          }
-        },
-        child: Icon(Icons.save),
-        backgroundColor: Colors.blueAccent,
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            GestureDetector(
-              child: _contactImage(context),
-            ),
-            TextField(
-              controller: _nameController,
-              focusNode: _nameFocus,
-              decoration: InputDecoration(labelText: 'Nome'),
-              onChanged: (text) {
-                _userEdited = true;
-                setState(() {
-                  _editedContact.name = text;
-                });
-              },
-            ),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
-              onChanged: (text) {
-                _userEdited = true;
-                _editedContact.email = text;
-              },
-              keyboardType: TextInputType.emailAddress,
-            ),
-            TextField(
-              controller: _phoneController,
-              decoration: InputDecoration(labelText: 'Phone'),
-              onChanged: (text) {
-                _userEdited = true;
-                _editedContact.phone = text;
-              },
-              keyboardType: TextInputType.phone,
-            )
-          ],
+    return WillPopScope(
+      onWillPop: _requestPop,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blueAccent,
+          title: Text(_editedContact.name ?? 'Novo contato'),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            if (_editedContact.name != null && _editedContact.name.isNotEmpty) {
+              Navigator.pop(context, _editedContact);
+            } else {
+              FocusScope.of(context).requestFocus(_nameFocus);
+            }
+          },
+          child: Icon(Icons.save),
+          backgroundColor: Colors.blueAccent,
+        ),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              GestureDetector(
+                child: _contactImage(context),
+              ),
+              TextField(
+                controller: _nameController,
+                focusNode: _nameFocus,
+                decoration: InputDecoration(labelText: 'Nome'),
+                onChanged: (text) {
+                  _userEdited = true;
+                  setState(() {
+                    _editedContact.name = text;
+                  });
+                },
+              ),
+              TextField(
+                controller: _emailController,
+                decoration: InputDecoration(labelText: 'Email'),
+                onChanged: (text) {
+                  _userEdited = true;
+                  _editedContact.email = text;
+                },
+                keyboardType: TextInputType.emailAddress,
+              ),
+              TextField(
+                controller: _phoneController,
+                decoration: InputDecoration(labelText: 'Phone'),
+                onChanged: (text) {
+                  _userEdited = true;
+                  _editedContact.phone = text;
+                },
+                keyboardType: TextInputType.phone,
+              )
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Future<bool> _requestPop() {
+    if (_userEdited == true) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Descartar alterações??'),
+              content: Text('Se sair as alterações serão perdidas'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Cancelar'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                FlatButton(
+                  child: Text('Sim'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            );
+          });
+      return Future.value(false);
+    } else {
+      return Future.value(true);
+    }
   }
 
   Widget _contactImage(BuildContext context) {
