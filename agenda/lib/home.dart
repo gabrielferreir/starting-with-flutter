@@ -41,13 +41,37 @@ class _HomeState extends State<Home> {
           child: Icon(Icons.add),
           backgroundColor: Colors.blueAccent,
         ),
-        body: ListView.builder(
+        body: _listView(context));
+  }
+
+  Widget _listView(BuildContext context) {
+    return contacts.length > 0
+        ? ListView.builder(
             padding: EdgeInsets.all(8.0),
             itemCount: contacts.length,
             itemBuilder: (context, index) {
               return _contactCard(context, index);
-//              return Text(contacts[index].name);
-            }));
+            })
+        : _viewEmpty(context);
+  }
+
+  Widget _viewEmpty(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        GestureDetector(
+          child: Icon(
+            Icons.person_add,
+            size: 180.0,
+            color: Colors.black12,
+          ),
+          onTap: () {
+            _showContactPage();
+          },
+        )
+      ],
+    );
   }
 
   Widget _contactCard(BuildContext context, int index) {

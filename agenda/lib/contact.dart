@@ -13,6 +13,9 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
+
+  ContactHelper helper = ContactHelper();
+
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -45,6 +48,9 @@ class _ContactPageState extends State<ContactPage> {
         appBar: AppBar(
           backgroundColor: Colors.blueAccent,
           title: Text(_editedContact.name ?? 'Novo contato'),
+          actions: <Widget>[
+            IconButton(icon: Icon(Icons.delete), onPressed: _showDialog)
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -148,5 +154,39 @@ class _ContactPageState extends State<ContactPage> {
               image: FileImage(File(_editedContact.img)),
             ),
     );
-  }
+    }
+
+    _showDialog() {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Deseja excluir?'),
+            content: Text('Caso exclua não possivel recuperar o contato'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Cancelar'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text('Sim'),
+                onPressed: () async {
+                  print(_editedContact);
+                  await helper.deleteContact(_editedContact.id);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        },
+      );
+    }
+
 }
+
+
+
+
