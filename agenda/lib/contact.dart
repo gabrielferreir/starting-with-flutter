@@ -1,7 +1,7 @@
 import 'dart:io';
-
 import 'package:agenda/helpers/contact_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ContactPage extends StatefulWidget {
   final Contact contact;
@@ -13,7 +13,6 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
-
   ContactHelper helper = ContactHelper();
 
   final TextEditingController _nameController = TextEditingController();
@@ -69,7 +68,22 @@ class _ContactPageState extends State<ContactPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               GestureDetector(
-                child: _contactImage(context),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    _contactImage(context)
+                  ],
+                ),
+                onTap: () {
+                  ImagePicker.pickImage(source: ImageSource.camera)
+                      .then((file) {
+                    if (file == null) return;
+                    setState(() {
+                      _editedContact.img = file.path;
+                    });
+                  });
+                },
               ),
               TextField(
                 controller: _nameController,
@@ -142,51 +156,47 @@ class _ContactPageState extends State<ContactPage> {
     return Container(
       width: 120.0,
       height: 120.0,
-      decoration:
-          BoxDecoration(shape: BoxShape.circle, color: Colors.blueAccent),
-      child: this._editedContact.img != 'paz'
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.blueAccent,
+        image: this._editedContact.img != null ? new DecorationImage(image: FileImage(File(_editedContact.img)), fit: BoxFit.cover) : null,
+      ),
+      child: this._editedContact.img == null
           ? Icon(
               Icons.add_a_photo,
               color: Colors.white,
               size: 48.0,
             )
-          : Image(
-              image: FileImage(File(_editedContact.img)),
-            ),
+          : null,
     );
-    }
+  }
 
-    _showDialog() {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Deseja excluir?'),
-            content: Text('Caso exclua não possivel recuperar o contato'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Cancelar'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              FlatButton(
-                child: Text('Sim'),
-                onPressed: () async {
-                  print(_editedContact);
-                  await helper.deleteContact(_editedContact.id);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-              )
-            ],
-          );
-        },
-      );
-    }
-
+  _showDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Deseja excluir?'),
+          content: Text('Caso exclua não possivel recuperar o contato'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: Text('Sim'),
+              onPressed: () async {
+                print(_editedContact);
+                await helper.deleteContact(_editedContact.id);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
 }
-
-
-
-

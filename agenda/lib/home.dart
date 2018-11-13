@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:agenda/contact.dart';
 import 'package:agenda/helpers/contact_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -89,7 +90,9 @@ class _HomeState extends State<Home> {
                   padding: EdgeInsets.all(8.0),
                   child: FlatButton(
                     child: Text('Ligar', style: TextStyle(color: Colors.red, fontSize: 16.0),),
-                    onPressed: null,
+                    onPressed: () {
+                      launch('tel:${contacts[index].phone}');
+                    },
                   ),
                 ),
                 Padding(
@@ -158,24 +161,42 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _contactImage(BuildContext context, int index) {
-    print(context);
+//  Widget _contactImage(BuildContext context, int index) {
+//    print(context);
+//
+//    return Container(
+//      width: 64.0,
+//      height: 64.0,
+//      decoration: BoxDecoration(
+//        shape: BoxShape.circle,
+//        color: Colors.blueAccent,
+//      ),
+//      child: this.contacts[index].img == null
+//          ? Icon(
+//              Icons.person,
+//              color: Colors.white,
+//            )
+//          : Image(
+//              image: FileImage(File(this.contacts[index].img)),
+//            ),
+//    );
+//  }
 
+  Widget _contactImage(BuildContext context, int index) {
     return Container(
       width: 64.0,
       height: 64.0,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.blueAccent,
+        image: this.contacts[index].img != null ? new DecorationImage(image: FileImage(File(this.contacts[index].img)), fit: BoxFit.cover) : null,
       ),
       child: this.contacts[index].img == null
           ? Icon(
-              Icons.person,
-              color: Colors.white,
-            )
-          : Image(
-              image: FileImage(File(this.contacts[index].img)),
-            ),
+        Icons.person,
+        color: Colors.white,
+      )
+          : null,
     );
   }
 
