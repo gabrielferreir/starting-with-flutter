@@ -4,6 +4,8 @@ import 'package:agenda/helpers/contact_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+enum OrderOptions { orderaz, orderza }
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -33,6 +35,21 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           title: Text('Contatos'),
           backgroundColor: Colors.blueAccent,
+          actions: <Widget>[
+            PopupMenuButton<OrderOptions>(
+              itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
+                    const PopupMenuItem<OrderOptions>(
+                      child: Text('Ordenar de A-Z'),
+                      value: OrderOptions.orderaz,
+                    ),
+                    const PopupMenuItem<OrderOptions>(
+                      child: Text('Ordenar de Z-A'),
+                      value: OrderOptions.orderza,
+                    ),
+                  ],
+              onSelected: _orderList,
+            )
+          ],
         ),
         backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton(
@@ -43,6 +60,22 @@ class _HomeState extends State<Home> {
           backgroundColor: Colors.blueAccent,
         ),
         body: _listView(context));
+  }
+
+  void _orderList(OrderOptions result) {
+    switch (result) {
+      case OrderOptions.orderaz:
+        contacts.sort((a, b) {
+          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        });
+        break;
+      case OrderOptions.orderza:
+        contacts.sort((a, b) {
+          return b.name.toLowerCase().compareTo(a.name.toLowerCase());
+        });
+        break;
+    }
+    setState(() {});
   }
 
   Widget _listView(BuildContext context) {
@@ -75,55 +108,65 @@ class _HomeState extends State<Home> {
     );
   }
 
-
   void _showOptions(BuildContext context, int index) {
-    showModalBottomSheet(context: context, builder: (context) {
-      return BottomSheet(
-        onClosing: () {},
+    showModalBottomSheet(
+        context: context,
         builder: (context) {
-          return Container(
-            padding: EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: FlatButton(
-                    child: Text('Ligar', style: TextStyle(color: Colors.red, fontSize: 16.0),),
-                    onPressed: () {
-                      launch('tel:${contacts[index].phone}');
-                    },
-                  ),
+          return BottomSheet(
+            onClosing: () {},
+            builder: (context) {
+              return Container(
+                padding: EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: FlatButton(
+                        child: Text(
+                          'Ligar',
+                          style: TextStyle(color: Colors.red, fontSize: 16.0),
+                        ),
+                        onPressed: () {
+                          launch('tel:${contacts[index].phone}');
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: FlatButton(
+                        child: Text(
+                          'Editar',
+                          style: TextStyle(color: Colors.red, fontSize: 16.0),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _showContactPage(contact: contacts[index]);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: FlatButton(
+                        child: Text(
+                          'Excluir',
+                          style: TextStyle(color: Colors.red, fontSize: 16.0),
+                        ),
+                        onPressed: () {
+                          helper.deleteContact(contacts[index].id);
+                          setState(() {
+                            contacts.removeAt(index);
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: FlatButton(
-                    child: Text('Editar', style: TextStyle(color: Colors.red, fontSize: 16.0),),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      _showContactPage(contact: contacts[index]);
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: FlatButton(
-                    child: Text('Excluir', style: TextStyle(color: Colors.red, fontSize: 16.0),),
-                    onPressed: () {
-                      helper.deleteContact(contacts[index].id);
-                      setState(() {
-                        contacts.removeAt(index);
-                      });
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-              ],
-            ),
+              );
+            },
           );
-        },
-      );
-    });
+        });
   }
 
   Widget _contactCard(BuildContext context, int index) {
@@ -161,27 +204,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-//  Widget _contactImage(BuildContext context, int index) {
-//    print(context);
-//
-//    return Container(
-//      width: 64.0,
-//      height: 64.0,
-//      decoration: BoxDecoration(
-//        shape: BoxShape.circle,
-//        color: Colors.blueAccent,
-//      ),
-//      child: this.contacts[index].img == null
-//          ? Icon(
-//              Icons.person,
-//              color: Colors.white,
-//            )
-//          : Image(
-//              image: FileImage(File(this.contacts[index].img)),
-//            ),
-//    );
-//  }
-
   Widget _contactImage(BuildContext context, int index) {
     return Container(
       width: 64.0,
@@ -189,13 +211,17 @@ class _HomeState extends State<Home> {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.blueAccent,
-        image: this.contacts[index].img != null ? new DecorationImage(image: FileImage(File(this.contacts[index].img)), fit: BoxFit.cover) : null,
+        image: this.contacts[index].img != null
+            ? new DecorationImage(
+                image: FileImage(File(this.contacts[index].img)),
+                fit: BoxFit.cover)
+            : null,
       ),
       child: this.contacts[index].img == null
           ? Icon(
-        Icons.person,
-        color: Colors.white,
-      )
+              Icons.person,
+              color: Colors.white,
+            )
           : null,
     );
   }
