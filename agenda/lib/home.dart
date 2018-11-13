@@ -74,6 +74,55 @@ class _HomeState extends State<Home> {
     );
   }
 
+
+  void _showOptions(BuildContext context, int index) {
+    showModalBottomSheet(context: context, builder: (context) {
+      return BottomSheet(
+        onClosing: () {},
+        builder: (context) {
+          return Container(
+            padding: EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: FlatButton(
+                    child: Text('Ligar', style: TextStyle(color: Colors.red, fontSize: 16.0),),
+                    onPressed: null,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: FlatButton(
+                    child: Text('Editar', style: TextStyle(color: Colors.red, fontSize: 16.0),),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _showContactPage(contact: contacts[index]);
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: FlatButton(
+                    child: Text('Excluir', style: TextStyle(color: Colors.red, fontSize: 16.0),),
+                    onPressed: () {
+                      helper.deleteContact(contacts[index].id);
+                      setState(() {
+                        contacts.removeAt(index);
+                      });
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    });
+  }
+
   Widget _contactCard(BuildContext context, int index) {
     return GestureDetector(
       child: Card(
@@ -104,7 +153,7 @@ class _HomeState extends State<Home> {
         ),
       ),
       onTap: () {
-        _showContactPage(contact: contacts[index]);
+        _showOptions(context, index);
       },
     );
   }
