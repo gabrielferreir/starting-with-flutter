@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 void main() async {
 //  DocumentSnapshot snapshot = await Firestore.instance.collection('usuarios').document('Gabriel').get();
@@ -19,7 +21,7 @@ void main() async {
 //    }
 //  });
 
-//  Firestore.instance.collection('mensagens').document('Gabriel').setData({'from': 'Gabriel', 'text': 'Olá'});
+//  Firestore.instance.collection('mensagens').document('TESTE').setData({'from': 'Gabriel', 'text': 'Olá'});
   runApp(Home());
 }
 
@@ -35,6 +37,36 @@ final ThemeData kIOSTheme = ThemeData(
 
 final ThemeData kAndroidTheme = ThemeData(
     primarySwatch: Colors.purple, accentColor: Colors.orangeAccent[400]);
+
+final googleSignIn = GoogleSignIn();
+final auth = FirebaseAuth.instance;
+
+Future<Null> _ensureLoggedIn() async {
+  GoogleSignInAccount user = googleSignIn.currentUser;
+  if (user == null) user = await googleSignIn.signInSilently();
+  if (user == null) user = await googleSignIn.signIn();
+
+  if (await auth.currentUser() == null) {
+    GoogleSignInAuthentication credentials =
+    await googleSignIn.currentUser.authentication;
+    await auth.signInWithGoogle(
+        idToken: credentials.idToken, accessToken: credentials.accessToken);
+  }
+}
+
+_handleSubmitted(String text) async {
+  await _ensureLoggedIn();
+  _sendMessage(text: text);
+}
+
+void _sendMessage({String text, String imgUrl}) {
+  Firestore.instance.collection('mensagens').document().setData({
+    'text': text,
+    'imgUrl': imgUrl,
+    'senderName': googleSignIn.currentUser.displayName,
+    'senderPhotoUrl': googleSignIn.currentUser.photoUrl
+  });
+}
 
 class _HomeState extends State<Home> {
   @override
@@ -91,6 +123,7 @@ class TextComposer extends StatefulWidget {
 }
 
 class _TextComposerState extends State<TextComposer> {
+  final _textController = TextEditingController();
   bool _isComposing = false;
 
   @override
@@ -111,12 +144,16 @@ class _TextComposerState extends State<TextComposer> {
             ),
             Expanded(
               child: TextField(
+                controller: _textController,
                 decoration:
                     InputDecoration.collapsed(hintText: 'Enviar uma mensagem'),
                 onChanged: (text) {
                   setState(() {
                     _isComposing = text.length > 0;
                   });
+                },
+                onSubmitted: (text) {
+                  _handleSubmitted(text);
                 },
               ),
             ),
