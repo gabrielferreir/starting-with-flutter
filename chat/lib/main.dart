@@ -15,11 +15,11 @@ void main() async {
 //    print(doc.data);
 //  }
 
-//  Firestore.instance.collection('mensagens').snapshots().listen((snapshot) {
-//    for (DocumentSnapshot doc in snapshot.documents) {
-//      print(doc.data);
-//    }
-//  });
+  Firestore.instance.collection('mensagens').snapshots().listen((snapshot) {
+    for (DocumentSnapshot doc in snapshot.documents) {
+      print(doc.data);
+    }
+  });
 
 //  Firestore.instance.collection('mensagens').document('TESTE').setData({'from': 'Gabriel', 'text': 'Olá'});
   runApp(Home());
@@ -46,16 +46,20 @@ Future<Null> _ensureLoggedIn() async {
   if (user == null) user = await googleSignIn.signInSilently();
   if (user == null) user = await googleSignIn.signIn();
 
-  if (await auth.currentUser() == null) {
-    GoogleSignInAuthentication credentials =
-    await googleSignIn.currentUser.authentication;
-    await auth.signInWithGoogle(
-        idToken: credentials.idToken, accessToken: credentials.accessToken);
-  }
+  print(user);
+
+//  if (await auth.currentUser() == null) {
+//    GoogleSignInAuthentication credentials =
+//        await googleSignIn.currentUser.authentication;
+//    await auth.signInWithGoogle(
+//        idToken: credentials.idToken, accessToken: credentials.accessToken);
+//  }
 }
 
 _handleSubmitted(String text) async {
+  print('AQUI');
   await _ensureLoggedIn();
+  print('AQUI2');
   _sendMessage(text: text);
 }
 
@@ -101,8 +105,23 @@ class _ChatScreenState extends State<ChatScreen> {
         body: Column(
           children: <Widget>[
             Expanded(
-              child: ListView(
-                children: <Widget>[ChatMessage(), ChatMessage(), ChatMessage()],
+              child: StreamBuilder(
+                stream: Firestore.instance.collection('mensagens').snapshots(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    default:
+                      return ListView.builder(
+                          itemCount: snapshot.data.documents.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ChatMessage(snapshot.data.documents[index].data);
+                          });
+                  }
+                },
               ),
             ),
             Divider(height: 1.0),
@@ -176,6 +195,10 @@ class _TextComposerState extends State<TextComposer> {
 }
 
 class ChatMessage extends StatelessWidget {
+  final Map<String, dynamic> data;
+
+  ChatMessage(this.data);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -186,8 +209,7 @@ class ChatMessage extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(right: 8.0),
             child: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Donald_Trump_official_portrait_%28cropped%29.jpg/435px-Donald_Trump_official_portrait_%28cropped%29.jpg'),
+              backgroundImage: NetworkImage(this.data['senderPhotoUrl']),
             ),
           ),
           Expanded(
@@ -195,12 +217,17 @@ class ChatMessage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Daniel',
+                  this.data['senderName'],
                   style: Theme.of(context).textTheme.subhead,
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 4.0),
-                  child: Text('Gabriel'),
+                  child: data['imgUrl'] != null
+                      ? Image.network(
+                          this.data['imgUrl'],
+                          width: 250.0,
+                        )
+                      : Text(this.data['text']),
                 )
               ],
             ),
