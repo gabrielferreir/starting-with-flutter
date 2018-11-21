@@ -15,11 +15,11 @@ void main() async {
 //    print(doc.data);
 //  }
 
-  Firestore.instance.collection('mensagens').snapshots().listen((snapshot) {
-    for (DocumentSnapshot doc in snapshot.documents) {
-      print(doc.data);
-    }
-  });
+//  Firestore.instance.collection('mensagens').snapshots().listen((snapshot) {
+//    for (DocumentSnapshot doc in snapshot.documents) {
+//      print(doc.data);
+//    }
+//  });
 
 //  Firestore.instance.collection('mensagens').document('TESTE').setData({'from': 'Gabriel', 'text': 'Olá'});
   runApp(Home());
@@ -52,9 +52,7 @@ Future<Null> _ensureLoggedIn() async {
 }
 
 _handleSubmitted(String text) async {
-  print('AQUI');
   await _ensureLoggedIn();
-  print('AQUI2');
   _sendMessage(text: text);
 }
 
@@ -140,6 +138,13 @@ class _TextComposerState extends State<TextComposer> {
   final _textController = TextEditingController();
   bool _isComposing = false;
 
+  void _reset() {
+    _textController.clear();
+    setState(() {
+      _isComposing = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return IconTheme(
@@ -168,6 +173,7 @@ class _TextComposerState extends State<TextComposer> {
                 },
                 onSubmitted: (text) {
                   _handleSubmitted(text);
+                  _reset();
                 },
               ),
             ),
@@ -196,7 +202,6 @@ class ChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(this.data);
     return Container(
       margin: const EdgeInsets.all(8.0),
       child: Row(
