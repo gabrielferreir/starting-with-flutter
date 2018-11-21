@@ -43,17 +43,12 @@ final auth = FirebaseAuth.instance;
 
 Future<Null> _ensureLoggedIn() async {
   GoogleSignInAccount user = googleSignIn.currentUser;
-  if (user == null) user = await googleSignIn.signInSilently();
-  if (user == null) user = await googleSignIn.signIn();
-
-  print(user);
-
-//  if (await auth.currentUser() == null) {
-//    GoogleSignInAuthentication credentials =
-//        await googleSignIn.currentUser.authentication;
-//    await auth.signInWithGoogle(
-//        idToken: credentials.idToken, accessToken: credentials.accessToken);
-//  }
+  if(user == null) user = await googleSignIn.signInSilently();
+  if(user == null) user = await googleSignIn.signIn();
+  if(await auth.currentUser() == null){
+    GoogleSignInAuthentication credentials = await googleSignIn.currentUser.authentication;
+    await auth.signInWithGoogle(idToken: credentials.idToken, accessToken: credentials.accessToken);
+  }
 }
 
 _handleSubmitted(String text) async {
@@ -201,6 +196,7 @@ class ChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(this.data);
     return Container(
       margin: const EdgeInsets.all(8.0),
       child: Row(
