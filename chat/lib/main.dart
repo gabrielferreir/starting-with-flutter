@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 
 void main() async {
 //  DocumentSnapshot snapshot = await Firestore.instance.collection('usuarios').document('Gabriel').get();
@@ -43,11 +47,13 @@ final auth = FirebaseAuth.instance;
 
 Future<Null> _ensureLoggedIn() async {
   GoogleSignInAccount user = googleSignIn.currentUser;
-  if(user == null) user = await googleSignIn.signInSilently();
-  if(user == null) user = await googleSignIn.signIn();
-  if(await auth.currentUser() == null){
-    GoogleSignInAuthentication credentials = await googleSignIn.currentUser.authentication;
-    await auth.signInWithGoogle(idToken: credentials.idToken, accessToken: credentials.accessToken);
+  if (user == null) user = await googleSignIn.signInSilently();
+  if (user == null) user = await googleSignIn.signIn();
+  if (await auth.currentUser() == null) {
+    GoogleSignInAuthentication credentials =
+        await googleSignIn.currentUser.authentication;
+    await auth.signInWithGoogle(
+        idToken: credentials.idToken, accessToken: credentials.accessToken);
   }
 }
 
@@ -111,7 +117,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       return ListView.builder(
                           itemCount: snapshot.data.documents.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return ChatMessage(snapshot.data.documents[index].data);
+                            return ChatMessage(
+                                snapshot.data.documents[index].data);
                           });
                   }
                 },
@@ -158,8 +165,14 @@ class _TextComposerState extends State<TextComposer> {
         child: Row(
           children: <Widget>[
             Container(
-              child:
-                  IconButton(icon: Icon(Icons.photo_camera), onPressed: () {}),
+              child: IconButton(
+                  icon: Icon(Icons.photo_camera),
+                  onPressed: () async {
+                    await _ensureLoggedIn();
+                    File imgFile = await ImagePicker.pickImage(source: ImageSource.camera);
+                    if (imgFile == null) return;
+                    print('imgFile');
+                  }),
             ),
             Expanded(
               child: TextField(
@@ -182,11 +195,21 @@ class _TextComposerState extends State<TextComposer> {
                 child: Theme.of(context).platform == TargetPlatform.iOS
                     ? CupertinoButton(
                         child: Text('Enviar'),
-                        onPressed: _isComposing ? () {} : null,
+                        onPressed: _isComposing
+                            ? () {
+                                _handleSubmitted(this._textController.text);
+                                _reset();
+                              }
+                            : null,
                       )
                     : IconButton(
                         icon: Icon(Icons.send),
-                        onPressed: _isComposing ? () {} : null,
+                        onPressed: _isComposing
+                            ? () {
+                                _handleSubmitted(this._textController.text);
+                                _reset();
+                              }
+                            : null,
                       ))
           ],
         ),
