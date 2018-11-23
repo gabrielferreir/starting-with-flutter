@@ -1,4 +1,3 @@
-# Flutter
+# Starting with flutter
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+https://www.udemy.com/curso-completo-flutter-app-android-ios/
